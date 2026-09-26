@@ -123,11 +123,27 @@ Views in `Views/` (Dataview-JS) werden in den Dashboards so aufgerufen:
 | `todo.js` | `dv.view("Views/todo", { pfad?, tage? })` | offene Todos |
 | `woche.js` | `dv.view("Views/woche", { von?, bis? })` | Journal-Wochenansicht |
 | `dateien.js` | `dv.view("Views/dateien", { pfad, rekursiv?, gruppiert?, nur? })` | Dateien eines Ordners inkl. PDFs |
+| `spalten.js` | `dv.view("Views/spalten", { spalten: [{ titel?, view, input? }, …], minBreite?, abstand? })` | legt mehrere Views **nebeneinander** (responsiv: schmal übereinander, viel Platz nebeneinander) |
 
 **Views nur ändern, wenn ausdrücklich gewünscht.** Pfadangaben enthalten
 Leerzeichen – immer in Anführungszeichen bzw. doppelten Backticks für
 `dv.pages('"… Path …"')` verwenden. Nach JS-Änderungen ist ein Neuladen
 (`Strg+R`) nötig.
+
+**Breite & Spalten:** Die Seitenbreite kommt aus `.obsidian/app.json`
+(`"readableLineLength": false`, Einstellungen → Editor → „Lesbare
+Zeilenlänge"), das Raster/Karten-Look aus dem CSS-Snippet
+`.obsidian/snippets/dashboard-spalten.css` (in `appearance.json` aktiviert).
+Der **Monatskalender** hängt zusätzlich am Snippet
+`.obsidian/snippets/kalender.css`: `Views/kalender.js` legt seine Knoten in
+einen eigenen Wrapper mit der Klasse `kalender-block` (am `dv.container` geht
+das nicht, weil `dv.view` ihn mit den Nachbar-Views teilt), das Snippet
+begrenzt die Breite auf ~1120 px, baut das 7-Spalten-Raster mit Termin-Chips
+und hebt den heutigen Tag hervor.
+Zum Anordnen in den Dashboards die `spalten`-View verwenden (Beispiele in den
+Dashboards); nach Änderungen an `.js`/CSS `Strg+R`. Die ` ```tasks `-Blöcke des
+*Tasks*-Plugins bleiben **einzeln** (sie sind interaktiv und lassen sich nicht
+in die Spalten-View übernehmen).
 
 ## 6) Todos
 

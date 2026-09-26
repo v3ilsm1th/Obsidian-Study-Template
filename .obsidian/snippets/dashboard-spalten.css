@@ -1,0 +1,52 @@
+/* ===========================================================================
+   dashboard-spalten.css – Volle Seitenbreite + nebeneinander angeordnete
+   Dashboard-Abschnitte (Karten).
+
+   Spalten erzeugt die Dataview-View `Views/spalten.js` (Klasse
+   `.spaltenreihe` mit den Kindern `.spalte`). Das Raster ist responsiv:
+   schmales Fenster → alles übereinander, viel Platz → nebeneinander.
+
+   Voraussetzung für volle Breite: Einstellungen → Editor →
+   „Lesbare Zeilenlänge" AUS (in `.obsidian/app.json`:
+   "readableLineLength": false).
+   =========================================================================== */
+
+/* --- Responsives Spaltenraster ------------------------------------------- */
+.spaltenreihe {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--spalte-min, 420px)), 1fr));
+    gap: var(--spalte-abstand, 18px);
+    align-items: start; /* Spalten unterschiedlicher Höhe nicht strecken */
+    margin: 0.4em 0 0.9em;
+}
+
+/* Breite Tabellen/Kalender dürfen das Raster nicht sprengen */
+.spalte {
+    min-width: 0;
+}
+
+/* --- Karten-Look (optional – Block einfach löschen) ---------------------- */
+.spalte {
+    background: var(--background-secondary);
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 10px;
+    padding: 10px 14px 12px;
+}
+
+.spalte > :last-child {
+    margin-bottom: 0;
+}
+
+.spalte-titel {
+    margin: 0 0 0.55em;
+    padding-bottom: 0.4em;
+    border-bottom: 1px solid var(--background-modifier-border);
+    font-size: 1.03em;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.spalte-fehler {
+    color: var(--text-error);
+    font-style: italic;
+}

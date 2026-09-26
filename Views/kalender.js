@@ -49,6 +49,13 @@ const istTerminSeite = p => {
 const lux = dv.luxon;
 const heute = lux.DateTime.now().startOf("day");
 
+// dv.view teilt sich den Container mit allen anderen Unter-Views (z. B. in
+// spalten.js) – die Klasse "kalender-block" darf deshalb NICHT am Container
+// hängen, sonst gälte das Kalender-CSS auch für die Nachbar-Tabellen.
+// Stattdessen merken wir uns die Kindnummer und holen die erzeugten Knoten
+// am Ende in einen eigenen Wrapper (unten, nach dem Rendern).
+const startKnoten = dv.container.childNodes.length;
+
 let termine = dv.pages().where(p => p.datum && istTerminSeite(p)).array();
 if (cfg.modul !== null && cfg.modul !== undefined) {
     termine = termine.filter(p => String(p.modul) === String(cfg.modul));
@@ -91,7 +98,11 @@ if (termine.length === 0) {
             zeilen.push(zellen.slice(i, i + 7).map(z => {
                 if (z === null) return "";
                 const istHeute = z.hasSame(heute, "day");
-                let zelle = istHeute ? `📅 **${z.day}**` : `**${z.day}**`;
+                // Heutiger Tag = markierter Badge (greift über :has() auf die ganze
+                // Zelle), sonst fette Tagzahl – CSS stellt sie in eine eigene Zeile.
+                let zelle = istHeute
+                    ? `<span class="kalender-heute">📅 ${z.day}</span>`
+                    : `**${z.day}**`;
                 const anTag = nachTag.get(z.toISODate()) || [];
                 for (const t of anTag) {
                     const mark = t.status === "erledigt" ? "✅" : (t.deadline ? "🔴" : "•");
@@ -99,7 +110,8 @@ if (termine.length === 0) {
                         ? modulKurz(t.modul) + "·"
                         : "";
                     const alias = (prae + (t.kurz || t.titel)).replace(/\|/g, "/");
-                    zelle += ` ${mark} [[${t.file.path.replace(/\.md$/, "")}|${alias}]]`;
+                    // Marker steckt im Link-Text → jeder Termin wird ein „Chip".
+                    zelle += ` [[${t.file.path.replace(/\.md$/, "")}|${mark} ${alias}]]`;
                 }
                 return zelle;
             }));
@@ -109,3 +121,12 @@ if (termine.length === 0) {
     }
     dv.paragraph("🔴 Abgabe/Deadline · • Termin · ✅ erledigt · 📅 heute");
 }
+
+// Kalender-Knoten in einen eigenen Wrapper legen = CSS-Anker "kalender-block"
+// (Snippet kalender.css). Alle dv.*-Aufrufe hängen synchron an, das heißt die
+// Knoten liegen ab startKnoten am Stück am Ende des Containers.
+const neu = Array.from(dv.container.childNodes).slice(startKnoten);
+const wrapper = document.createElement("div");
+wrapper.className = "kalender-block";
+for (const knoten of neu) wrapper.appendChild(knoten);
+dv.container.insertBefore(wrapper, dv.container.childNodes[startKnoten] || null);

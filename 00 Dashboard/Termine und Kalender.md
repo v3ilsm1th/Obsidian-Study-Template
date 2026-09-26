@@ -25,10 +25,12 @@ await dv.view("Views/termine", { tage: null })
 
 ## 🏫 Termine nach Modul
 
-<!-- Pro Modul einen Block kopieren und `modul` ersetzen. -->
-
 ```dataviewjs
-await dv.view("Views/termine", { modul: "12345", tage: null })
+await dv.view("Views/spalten", { spalten: [
+    { titel: "🏫 12345 Beispielmodul", view: "Views/termine", input: { modul: "12345", tage: null } }
+    // Pro Modul eine Zeile ergänzen – Komma ans Ende der Zeile darüber setzen:
+    // , { titel: "🏫 <Nr> <Name>", view: "Views/termine", input: { modul: "<Nr>", tage: null } }
+]})
 ```
 
 ## ➕ Neuen Termin eintragen

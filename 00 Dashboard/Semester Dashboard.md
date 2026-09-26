@@ -27,16 +27,13 @@ dv.paragraph(`📓 **Journal:** [[${tagesPfad}|Heute, ${heute.toFormat("dd.MM.yy
 | --- | --- |
 | 📚 12345 Beispielmodul | [[12345 Dashboard]] |
 
-## ⏰ Nächste Termine (alle Module, 21 Tage)
+## ⏰ Nächste Termine & 🔴 Abgaben (alle Module)
 
 ```dataviewjs
-await dv.view("Views/termine", { tage: 21 })
-```
-
-## 🔴 Abgaben & Einsendeaufgaben
-
-```dataviewjs
-await dv.view("Views/deadlines", {})
+await dv.view("Views/spalten", { spalten: [
+    { titel: "⏰ Nächste Termine (21 Tage)",  view: "Views/termine",  input: { tage: 21 } },
+    { titel: "🔴 Abgaben & Einsendeaufgaben", view: "Views/deadlines", input: {} }
+]})
 ```
 
 ## 📅 Kalender – alle Termine des Semesters

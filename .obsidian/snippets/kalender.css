@@ -1,0 +1,109 @@
+/* =============================================================================
+   kalender.css – Monatskalender (Views/kalender.js) als echter Kalender
+
+   Dataview erzwingt bei Tabellen "width: 100%" – auf einer vollbreiten Seite
+   spannte sich der Kalender über das ganze Fenster und wirkte wie eine
+   Tabelle, nicht wie ein Kalender. Dieses Snippet begrenzt die Breite,
+   macht daraus ein festes 7-Spalten-Raster mit Tageszellen, schattiert das
+   Wochenende, setzt die Tagzahl in eine eigene Zeile und macht aus den
+   Terminen in den Zellen „Chips".
+
+   Voraussetzung: Views/kalender.js legt die erzeugten Knoten in einen
+   eigenen Wrapper <div class="kalender-block"> (der heutige Tag zusätzlich
+   mit der Klasse "kalender-heute").
+
+   Aktiviert in .obsidian/appearance.json ("kalender").
+   Nach Änderungen an JS/Snippets Strg+R.
+   ========================================================================== */
+
+/* --- 1. Rahmen: Kalenderbreite statt Fensterbreite ---------------------- */
+.kalender-block .table-view-table {
+    width: 100%;
+    max-width: 1120px;        /* ~160 px pro Wochentag */
+    table-layout: fixed;      /* 7 gleich breite Spalten */
+    border-collapse: collapse;
+    border: 1px solid var(--background-modifier-border);
+    margin: 0.3em 0 0.4em;
+}
+
+/* --- 2. Wochentags-Kopfzeile ------------------------------------------- */
+.kalender-block .table-view-table > thead > tr > th {
+    font-size: 0.72em;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 5px 8px;
+    border: none;
+    border-bottom: 2px solid var(--background-modifier-border);
+    background-color: var(--background-secondary);
+}
+
+/* --- 3. Tagzellen: Raster, Mindesthöhe, oben ausgerichtet --------------- */
+.kalender-block .table-view-table > tbody > tr > td {
+    vertical-align: top;
+    text-align: left;
+    font-weight: 400;
+    height: 6em;               /* Mindesthöhe – wächst bei vielen Terminen */
+    padding: 6px 8px 8px;
+    border: 1px solid var(--background-modifier-border);
+    line-height: 1.35;
+    word-break: break-word;
+}
+
+/* --- 4. Wochenende (Spalten 6 + 7 = Sa, So) ---------------------------- */
+.kalender-block .table-view-table > thead > tr > th:nth-child(6),
+.kalender-block .table-view-table > thead > tr > th:nth-child(7),
+.kalender-block .table-view-table > tbody > tr > td:nth-child(6),
+.kalender-block .table-view-table > tbody > tr > td:nth-child(7) {
+    background-color: var(--background-secondary);
+}
+
+/* --- 5. Tagzahl bekommt eine eigene Zeile ------------------------------ */
+.kalender-block .table-view-table > tbody > tr > td strong:first-child {
+    display: block;
+    font-size: 1.02em;
+    margin-bottom: 3px;
+}
+
+/* --- 6. Heutiger Tag: Badge in der Zelle + Hervorhebung ---------------- */
+.kalender-block .kalender-heute {
+    display: block;
+    font-size: 1.02em;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.kalender-block .table-view-table > tbody > tr > td:has(.kalender-heute) {
+    background-color: color-mix(in srgb, var(--interactive-accent) 16%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--interactive-accent) 45%, transparent);
+}
+
+/* --- 7. Termine als „Chips" (ein Link = ein Termin) -------------------- */
+.kalender-block .table-view-table > tbody > tr > td a {
+    display: inline-block;
+    max-width: 100%;
+    margin: 1px 3px 2px 0;
+    padding: 1px 7px;
+    border: 1px solid var(--background-modifier-border);
+    border-radius: 999px;
+    background-color: var(--background-primary);
+    font-size: 0.84em;
+    line-height: 1.5;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+
+.kalender-block .table-view-table > tbody > tr > td a:hover {
+    background-color: var(--background-modifier-hover);
+    border-color: var(--interactive-accent);
+    text-decoration: none;
+}
+
+/* --- 8. Legende (dv.paragraph) dezent halten --------------------------- */
+.kalender-block p {
+    margin-top: 0.4em;
+    font-size: 0.85em;
+    color: var(--text-muted);
+}

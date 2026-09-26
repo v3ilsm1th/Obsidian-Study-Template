@@ -8,5 +8,6 @@
   "templatesFolderPath": "Templates",
   "foldHeading": true,
   "foldIndent": true,
-  "strictLineBreaks": false
+  "strictLineBreaks": false,
+  "readableLineLength": false
 }

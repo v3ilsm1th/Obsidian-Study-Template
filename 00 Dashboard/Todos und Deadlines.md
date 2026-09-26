@@ -9,10 +9,13 @@ tags:
 
 🏠 [[Semester Dashboard]] · 📅 [[Termine und Kalender]]
 
-## 🔴 Abgaben & Einsendeaufgaben (alle Module)
+## 🔴 Abgaben & ⏰ offene Todos (alle Module)
 
 ```dataviewjs
-await dv.view("Views/deadlines", {})
+await dv.view("Views/spalten", { spalten: [
+    { titel: "🔴 Abgaben & Einsendeaufgaben", view: "Views/deadlines", input: {} },
+    { titel: "🧰 Alle offenen Todos",         view: "Views/todo",      input: {} }
+]})
 ```
 
 ## ⚠️ Überfällige Todos
@@ -73,12 +76,6 @@ sort by path
 > **`#moodle`** (🎬 Videos/Recordings, 📄 Papers & Reading, Foren, Downloads
 > im LMS): erscheinen dagegen **bewusst hier** als Reminder, auch ohne
 > Datum – sie stehen im Abschnitt „🗃️ Ohne Datum".
-
-## 🧰 Alle offenen Todos (Dataview-Ansicht)
-
-```dataviewjs
-await dv.view("Views/todo", {})
-```
 
 ## ➕ Neue Todos
 

@@ -12,8 +12,8 @@ tags:
 > [!info] Das ist ein Beispiel zum Ausprobieren
 > Sobald deine eigenen Module stehen, kannst du diesen Ordner
 > (`12345 Beispielmodul`) löschen – dazu die Zeile in der
-> [[Semester Dashboard|Modul-Tabelle]] und den Block „Termine nach Modul"
-> in [[Termine und Kalender]] entfernen.
+> [[Semester Dashboard|Modul-Tabelle]] und die Spalte unter „Termine nach
+> Modul" in [[Termine und Kalender]] entfernen.
 
 🏠 [[Semester Dashboard]] · 📅 [[Termine und Kalender]] · ✅ [[Todos und Deadlines]] · 🔗 [[Links und Ressourcen]]
 
@@ -50,33 +50,29 @@ dv.paragraph(`**${fertig} von ${gesamt}** Einträgen erledigt (**${anteil} %**) 
 - [ ] 🎬 Video zur Lektion 2 ansehen #moodle
 - [ ] ⬆️ Einsendeaufgabe 1 hochgeladen #checklist
 
-## ⏰ Nächste Termine (30 Tage)
+## ⏰ Termine & 🔴 Abgaben
 
 ```dataviewjs
-await dv.view("Views/termine", { modul: "12345", tage: 30 })
+await dv.view("Views/spalten", { spalten: [
+    { titel: "⏰ Nächste Termine (30 Tage)", view: "Views/termine",  input: { modul: "12345", tage: 30 } },
+    { titel: "🔴 Abgaben & Deadlines",       view: "Views/deadlines", input: { modul: "12345" } }
+]})
 ```
 
-## 🔴 Abgaben & Deadlines
+## 📅 Kalender & ✅ Todos
 
 ```dataviewjs
-await dv.view("Views/deadlines", { modul: "12345" })
+await dv.view("Views/spalten", { spalten: [
+    { titel: "📅 Kalender 12345 – Beispielmodul", view: "Views/kalender", input: { modul: "12345" } },
+    { titel: "✅ Offene Todos",                    view: "Views/todo",     input: { pfad: "12345 Beispielmodul" } }
+]})
 ```
 
-## 📅 Kalender 12345 – Beispielmodul
-
-```dataviewjs
-await dv.view("Views/kalender", { modul: "12345" })
-```
-
-## ✅ Todos
+### ✏️ Offene Punkte (manuell gepflegt)
 
 - [ ] Erste Lektion durcharbeiten und `status` auf `laeuft` setzen
 - [ ] Eigene Notizen in `Inbox/` ablegen und einsortieren
 - [ ] LMS-Links unter [[Links und Ressourcen]] eintragen 📅 2026-10-05
-
-```dataviewjs
-await dv.view("Views/todo", { pfad: "12345 Beispielmodul" })
-```
 
 > [!example]- 📂 Materialien & Skripte
 > ```dataviewjs

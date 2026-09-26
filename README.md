@@ -43,6 +43,7 @@
    | Stelle | Muss stehen auf |
    | --- | --- |
    | Einstellungen → **Dataview** | ☑ *Enable JavaScript Queries* (**sonst bleiben alle Dashboards leer!**) |
+| Einstellungen → **Editor** | „Lesbare Zeilenlänge" **AUS** (sonst sind die Dashboards schmal) |
    | Einstellungen → **Templater** | Vorlagen-Ordner `Templates` · ☑ *Trigger Templater on new file creation* |
    | Einstellungen → **Templates** (Core) | Vorlagen-Ordner `Templates` |
    | Einstellungen → **Tägliche Notizen** (Core) | Ordner `99 Journal/Tage` · Format `YYYY-MM-DD` · Vorlage `Templates/Tages Journal Template` |
@@ -122,7 +123,7 @@ sofort Daten zeigen.
    *Folder Templates* → `…/<Dein Modul>/05 Lektionen` → `Templates/Lektion Template`
    (dann landet die Vorlage automatisch in neuen Notizen dieses Ordners).
 7. **Beispielmodul entfernen:** Ordner `12345 Beispielmodul` löschen, die
-   Zeile in der Modul-Tabelle und den Block „Termine nach Modul" streichen.
+   Zeile in der Modul-Tabelle und die Spalte „Termine nach Modul" streichen.
 
 ## 6. Semester anlegen (oder duplizieren)
 
@@ -192,6 +193,7 @@ ausschließlich nach `Termine/`**.
 | `todo.js` | `dv.view("Views/todo", { pfad?, tage?, max? })` | offene Todos |
 | `woche.js` | `dv.view("Views/woche", { von?, bis? })` | Journal-Wochenansicht |
 | `dateien.js` | `dv.view("Views/dateien", { pfad, rekursiv?, gruppiert?, nur? })` | Dateien eines Ordners inkl. PDFs |
+| `spalten.js` | `dv.view("Views/spalten", { spalten: [{ titel?, view, input? }, …] })` | mehrere Views **nebeneinander** (responsiv) |
 
 > [!note] Warum eine eigene Datei-View?
 > Dataview indexiert nur `.md`. `dateien.js` liest direkt über `app.vault`
@@ -201,12 +203,23 @@ ausschließlich nach `Termine/`**.
 **Views nur ändern, wenn es nötig ist** – nach jeder Änderung `Strg+R`.
 Pfadangaben enthalten Leerzeichen: immer in Anführungszeichen schreiben.
 
+**Layout: volle Breite & Spalten.** „Lesbare Zeilenlänge" ist aus
+(`.obsidian/app.json`), damit die Dashboards die ganze Seitenbreite nutzen.
+Abschnitte stehen mit der `spalten`-View nebeneinander (Raster + Karten-Look
+aus dem Snippet `dashboard-spalten.css`), der Kalender hat sein eigenes
+Snippet `kalender.css`: feste 7-Spalten-Breite statt Überbreite,
+Wochenende-Schattierung, jeder Termin als „Chip" und der heutige Tag
+hervorgehoben. Beide Snippets sind unter **Einstellungen →
+Erscheinungsbild → CSS-Snippets** aktiviert; nach Änderungen `Strg+R`.
+
 ## 9. Tägliche Routine
 
 1. **Morgens:** Kalender in der Sidebar (Plugin *Calendar*) anklicken →
    Tagesnotiz öffnen → `📅 Termine & Todos heute` füllt sich automatisch.
 2. **Todos** in `00 Dashboard/Todos und Deadlines` prüfen (Fälligkeiten mit `📅`).
-3. **Abgaben** unter „🔴 Abgaben & Einsendeaufgaben" prüfen.
+3. **Abgaben** unter „⏰ Nächste Termine & 🔴 Abgaben" im
+   `00 Dashboard/Semester Dashboard` bzw. „🔴 Abgaben & ⏰ offene Todos" in
+   `00 Dashboard/Todos und Deadlines` prüfen.
 4. **Abends:** `## 🌙 Tagesrückblick` ausfüllen, Lektionsstatus aktualisieren.
 5. **Wochenweise:** `99 Journal/Wochen/` (Kalender → Wochennotiz) für Rückblick + Ziele.
 6. **Karten:** Befehlspalette → *Spaced Repetition: Review flashcards*.
@@ -232,6 +245,8 @@ Frage endet mit `?`, Antwort folgt, Karten mit `---` trennen, Deck-Kopfzeile
 | --- | --- |
 | Dashboards bleiben leer oder zeigen Text | Einstellungen → Dataview → **Enable JavaScript Queries** ☑, dann `Strg+R` |
 | Nach Änderungen an `Views/*.js` ändert sich nichts | Obsidian neu laden (`Strg+R`) |
+| Dashboards sind schmal statt über die ganze Breite | Einstellungen → Editor → „Lesbare Zeilenlänge" **AUS**, dann `Strg+R` |
+| Kalender wirkt überbreit / nicht wie ein Kalender | Einstellungen → Erscheinungsbild → CSS-Snippets: `kalender` und `dashboard-spalten` ☑, dann `Strg+R` |
 | Kalender-Klick erstellt keine Notiz | Tägliche Notizen-Ordner/Vorlage prüfen (Schritt 3) |
 | PDFs fehlen in Material-Listen | Ist korrekt: Dataview sieht nur `.md` – die Material-Blöcke nutzen `dateien.js` (gilt nur, wenn `Views/dateien.js` existiert) |
 | Todos tauchen zweimal auf | Modul-Aufgabe ist `#moodle` (beabsichtigter Reminder) oder lag doppelt an – `#checklist` zum Ausblenden |
