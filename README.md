@@ -2,7 +2,7 @@
 
 > Ein **leeres Gerüst** für die eigene Studienorganisation: Ordnerstruktur,
 > Dashboards, Kalender, Todo-/Deadline-Übersichten, Fortschrittsverfolgung,
-> Lernkarten und Vorlagen. **Keine fremden Studienunterlagen** 
+> Lernkarten und Vorlagen.
 
 **Inhalt**
 1. [Voraussetzungen](#1-voraussetzungen) ·
