@@ -20,7 +20,25 @@ await dv.view("Views/fortschritt", {})
 - Befehlspalette → **Spaced Repetition: Review flashcards**
 - Statistik: Befehlspalette → *Spaced Repetition: View statistics*
 - Decks liegen in den Ordnern `…/04 Lernkarten/` der Module
-  (Kopfzeile `#flashcards/<Deck-Name>` in der Notiz)
+  (Deck-Kopfzeile `#flashcards/<Modulnr>/<Lektion>`, ohne Leerzeichen,
+  Ebenen mit `/`)
+- Kartenformat: **eine Zeile je Karte** `Frage?::Antwort`, Leerzeile
+  zwischen den Karten – Details in `AGENTS.md` §3
+- Kontrolle: *Review flashcards* muss das Deck mit Kartenzahl zeigen,
+  sonst wurde die Datei nicht erkannt
+
+## 📦 Anki-Export (Plugin *Flashcards*)
+
+- Community-Plugin **Flashcards** ist aktiviert; Sync-Bereich = die
+  `04 Lernkarten`-Ordner, Standarddeck `Studium`, Deck je Notiz über
+  `cards-deck` im Frontmatter (Vorschau: `::` wird als Pfeil `→` dargestellt)
+- Voraussetzung: **Anki (Desktop)** läuft + Add-on **AnkiConnect**
+  (ID `2055492159`)
+- Export: Befehlspalette → **Flashcards: Update Anki from vault**
+  (oder *… from current note*)
+- Statusleiste zeigt bei offener Lernkarten-Notiz `Note: N cards, …`;
+  beim ersten Sync ergänzt das Plugin Anker ` ^q-xxxx` und eine
+  `flashcards:`-Eigenschaft (unschädlich für Spaced Repetition)
 
 ## ⚙️ So wird der Fortschritt gepflegt
 

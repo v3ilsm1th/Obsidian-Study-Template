@@ -4,6 +4,7 @@ modul: "<% await tp.system.prompt('Modul-Nummer, z. B. 12345', '12345') %>"
 nummer: <% tp.file.cursor("1") %>
 label: "<% tp.file.cursor('Lektion 1') %>"
 titel: <% tp.file.title %>
+# block: "<Untereinheit>"   ← optional, wenn Lektionen in Blöcke unterteilt sind (z. B. Unit/Part)
 status: offen
 tags:
   - lektion

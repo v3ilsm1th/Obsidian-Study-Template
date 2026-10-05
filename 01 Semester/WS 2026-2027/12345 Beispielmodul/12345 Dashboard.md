@@ -15,7 +15,7 @@ tags:
 > [[Semester Dashboard|Modul-Tabelle]] und die Spalte unter „Termine nach
 > Modul" in [[Termine und Kalender]] entfernen.
 
-🏠 [[Semester Dashboard]] · 📅 [[Termine und Kalender]] · ✅ [[Todos und Deadlines]] · 🔗 [[Links und Ressourcen]]
+🏠 [[Semester Dashboard]] · 📅 [[Termine und Kalender]] · ✅ [[Todos und Deadlines]] · 🔗 [[Links und Ressourcen]] · 📝 [[12345 Zusammenfassungen|Zusammenfassungen]]
 
 ## 📊 Lernerfolg & Lektionen
 
@@ -94,9 +94,21 @@ await dv.view("Views/spalten", { spalten: [
 > await dv.view("Views/dateien", { pfad: "01 Semester/WS 2026-2027/12345 Beispielmodul/04 Lernkarten" })
 > ```
 
+## 📝 Meine Zusammenfassungen
+
+```dataviewjs
+await dv.view("Views/dateien", { pfad: "01 Semester/WS 2026-2027/12345 Beispielmodul/01 Materialien/Zusammenfassungen" })
+```
+
+Neue Notiz im Ordner `01 Materialien/Zusammenfassungen` anlegen – Templater
+setzt automatisch die Vorlage `Templates/Zusammenfassung Template` mit
+**Inhaltsverzeichnis ganz oben**. Übersicht & Anleitung:
+[[12345 Zusammenfassungen]]
+
 ## 📚 Schnellzugriff
 
 - 📂 `01 Materialien` (Skripte, Folien, PDFs – Unterordner je Lektion möglich)
+- 📝 `01 Materialien/Zusammenfassungen` (eigene Zusammenfassungen mit TOC)
 - 📝 `02 Übungen` (Übungsblätter & Abgaben)
 - 📖 `03 Literatur` (Bücher, Paper, Links)
 - 🧠 `04 Lernkarten` (Spaced-Repetition-Decks)

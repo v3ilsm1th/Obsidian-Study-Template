@@ -8,5 +8,8 @@
   "obsidian-spaced-repetition",
   "obsidian-tasks-plugin",
   "style-settings",
-  "templater-obsidian"
+  "templater-obsidian",
+  "obsidian-git",
+  "flashcards-obsidian",
+  "opencode"
 ]

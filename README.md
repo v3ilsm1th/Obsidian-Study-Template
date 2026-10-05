@@ -37,13 +37,13 @@
    *Community-Plugins* → zustimmen. Dann unter
    **Einstellungen → Community-Plugins** prüfen, dass diese aktiv sind:
    `Dataview`, `Templater`, `Tasks`, `Calendar`, `Spaced Repetition`,
-   `Style Settings` (plus optional `Excalidraw`, `Kanban`,
-   `Notebook Navigator`, `JupyMD`).
+   `Flashcards`, `Style Settings` (plus optional `obsidian-git`,
+   `opencode`, `Excalidraw`, `Kanban`, `Notebook Navigator`, `JupyMD`).
 3. **Wichtige Einstellungen kontrollieren:**
    | Stelle | Muss stehen auf |
    | --- | --- |
    | Einstellungen → **Dataview** | ☑ *Enable JavaScript Queries* (**sonst bleiben alle Dashboards leer!**) |
-| Einstellungen → **Editor** | „Lesbare Zeilenlänge" **AUS** (sonst sind die Dashboards schmal) |
+   | Einstellungen → **Editor** | „Lesbare Zeilenlänge" **AUS** (sonst sind die Dashboards schmal) |
    | Einstellungen → **Templater** | Vorlagen-Ordner `Templates` · ☑ *Trigger Templater on new file creation* |
    | Einstellungen → **Templates** (Core) | Vorlagen-Ordner `Templates` |
    | Einstellungen → **Tägliche Notizen** (Core) | Ordner `99 Journal/Tage` · Format `YYYY-MM-DD` · Vorlage `Templates/Tages Journal Template` |
@@ -72,7 +72,9 @@ Obsidian Studium Vault/
 │       ├── Termine/           # EINE Notiz pro Termin (siehe Vorlage)
 │       └── 12345 Beispielmodul/
 │           ├── 12345 Dashboard.md   # Modul-Dashboard
-│           ├── 01 Materialien/      # Skripte, Folien, PDFs
+│           ├── 12345 Zusammenfassungen.md  # Übersicht eigener Zusammenfassungen
+│           ├── 01 Materialien/      # Skripte, Folien, PDFs + Unterordner
+│           │   └── Zusammenfassungen/      # eigene Zusammenfassungen (TOC-Template)
 │           ├── 02 Übungen/          # Übungsblätter & Abgaben
 │           ├── 03 Literatur/        # Bücher, Paper, Links
 │           ├── 04 Lernkarten/       # Spaced-Repetition-Decks
@@ -98,8 +100,8 @@ Obsidian Studium Vault/
 | Lernkarten | `04 Lernkarten/…` + Befehlspalette *Spaced Repetition: Review flashcards* | Karten üben |
 
 Das Beispiel enthält 3 Lektionen (unterschiedliche Status), 2 Termine
-(einen davon als Abgabe) und ein kleines Karten-Deck – damit alle Views
-sofort Daten zeigen.
+(einen davon als Abgabe), ein kleines Karten-Deck und die
+Zusammenfassungs-Übersicht – damit alle Views sofort Daten zeigen.
 
 ## 5. Eigenes Modul anlegen (Rezept)
 
@@ -107,7 +109,9 @@ sofort Daten zeigen.
    ```
    <Modulnr> <Modulname>/
       <Modulnr> Dashboard.md
+      <Modulnr> Zusammenfassungen.md
       01 Materialien/
+         Zusammenfassungen/
       02 Übungen/
       03 Literatur/
       04 Lernkarten/
@@ -115,14 +119,21 @@ sofort Daten zeigen.
    ```
 2. **Modul-Dashboard:** `12345 Dashboard.md` kopieren, umbenennen, die
    Beispiel-Bezeichner (`12345`) durch deine Nummer ersetzen.
-3. **Lektionen:** neue Datei in `05 Lektionen/` → Vorlage
+3. **Zusammenfassungs-Übersicht:** `12345 Zusammenfassungen.md` kopieren,
+   umbenennen und den `pfad:` im `dateien`-Aufruf an den neuen Ordner anpassen.
+4. **Lektionen:** neue Datei in `05 Lektionen/` → Vorlage
    `Templates/Lektion Template` (Templater fragt die Modul-Nummer).
-4. **Tabelle im Semester-Dashboard:** unter „Meine Module" eine Zeile ergänzen.
-5. **Links:** Modul in `00 Dashboard/Links und Ressourcen` eintragen.
-6. *(Optional)* **Templater:** Einstellungen → Templater →
-   *Folder Templates* → `…/<Dein Modul>/05 Lektionen` → `Templates/Lektion Template`
-   (dann landet die Vorlage automatisch in neuen Notizen dieses Ordners).
-7. **Beispielmodul entfernen:** Ordner `12345 Beispielmodul` löschen, die
+5. **Tabelle im Semester-Dashboard:** unter „Meine Module" eine Zeile ergänzen.
+6. **Links:** Modul in `00 Dashboard/Links und Ressourcen` eintragen.
+7. **Sync-Bereiche pflegen:** `.obsidian/plugins/flashcards-obsidian/data.json`
+   → `syncScope.includedFolders` um `…/<Dein Modul>/04 Lernkarten` ergänzen.
+8. *(Optional)* **Templater:** Einstellungen → Templater → *Folder Templates*
+   prüfen – für jedes Modul sollten gelten:
+   `…/05 Lektionen` → `Lektion Template`,
+   `…/01 Materialien/Zusammenfassungen` → `Zusammenfassung Template`,
+   `…/04 Lernkarten` → `Lernkarten Template`,
+   `…/01 Materialien`, `…/02 Übungen`, `…/03 Literatur` → `Material Template`.
+9. **Beispielmodul entfernen:** Ordner `12345 Beispielmodul` löschen, die
    Zeile in der Modul-Tabelle und die Spalte „Termine nach Modul" streichen.
 
 ## 6. Semester anlegen (oder duplizieren)
@@ -164,7 +175,8 @@ tags:
 > Davon hängen **alle** Deadline-Übersichten ab.
 
 **Lektionen:** `typ: lektion`, `modul`, `nummer`, `label`, `titel`,
-`status: offen | laeuft | fertig` – den `status` ändern genügt, die
+`status: offen | laeuft | fertig` (ggf. `block` für Unterteilungen wie
+Unit/Part) – den `status` ändern genügt, die
 Dashboards zählen automatisch neu. Lektionen bleiben schlank
 (Überblick, Materialien, Karten, Zusammenfassung) – **Termine gehören
 ausschließlich nach `Termine/`**.
@@ -193,6 +205,7 @@ ausschließlich nach `Termine/`**.
 | `todo.js` | `dv.view("Views/todo", { pfad?, tage?, max? })` | offene Todos |
 | `woche.js` | `dv.view("Views/woche", { von?, bis? })` | Journal-Wochenansicht |
 | `dateien.js` | `dv.view("Views/dateien", { pfad, rekursiv?, gruppiert?, nur? })` | Dateien eines Ordners inkl. PDFs |
+| `inhaltsverzeichnis.js` | `dv.view("Views/inhaltsverzeichnis", { minLevel?, maxLevel?, titel? })` | Inhaltsverzeichnis der aktuellen Notiz (live, aus den Überschriften) |
 | `spalten.js` | `dv.view("Views/spalten", { spalten: [{ titel?, view, input? }, …] })` | mehrere Views **nebeneinander** (responsiv) |
 
 > [!note] Warum eine eigene Datei-View?
@@ -224,20 +237,36 @@ Erscheinungsbild → CSS-Snippets** aktiviert; nach Änderungen `Strg+R`.
 5. **Wochenweise:** `99 Journal/Wochen/` (Kalender → Wochennotiz) für Rückblick + Ziele.
 6. **Karten:** Befehlspalette → *Spaced Repetition: Review flashcards*.
 
-## 10. Lernkarten (Spaced Repetition)
+## 10. Lernkarten (Spaced Repetition + Anki-Export)
 
-Neue Karten über `Templates/Lernkarten Template` (Ordner `04 Lernkarten/`):
+Neue Decks über `Templates/Lernkarten Template` (Ordner `04 Lernkarten/`).
+Karten sind **eine Zeile je Karte** – das Format für *beide* Plugins:
 
 ```markdown
-#flashcards/Mein Deck
+#flashcards/Mein-Modul/Lektion-1
 
-Was ist ein Ideal?
-Teilmenge eines Rings, die unter den Ringoperationen abgeschlossen ist.
----
+Was ist ein Ideal?::Teilmenge eines Rings, abgeschlossen unter den Ringoperationen.
+
+Nenne das neutrale Element von (R, +, 0).::0
 ```
 
-Frage endet mit `?`, Antwort folgt, Karten mit `---` trennen, Deck-Kopfzeile
-`#flashcards/<Deck>`. Üben: Befehlspalette → *Spaced Repetition: Review flashcards*.
+- Frage endet mit `?`, **genau ein `::`** pro Zeile, **Leerzeile** zwischen
+  den Karten (sonst rutschen Überschriften/Nachbarfragen in die Karte).
+- Deck-Kopfzeile `#flashcards/<Modulnr>/<Lektion>` ohne Leerzeichen
+  (Tags enden am Leerzeichen) mit Leerzeile davor und danach.
+- `cards-deck` im Frontmatter = Deck in Anki (`Übergeordnet::Unterdeck`,
+  sonst Standarddeck `Studium`) – nach dem Umbenennen der Notiz prüfen.
+- Üben: Befehlspalette → *Spaced Repetition: Review flashcards* – das Deck
+  muss mit Kartenzahl erscheinen (sonst stimmt das Format nicht).
+
+**Anki-Export** (Plugin *Flashcards*): Voraussetzung **Anki (Desktop)** +
+Add-on **AnkiConnect** (ID `2055492159`), dann Befehlspalette →
+**Flashcards: Update Anki from vault**. Beim ersten Sync ergänzt das
+Plugin Anker ` ^q-xxxx` und eine `flashcards:`-Eigenschaft (unschädlich
+für Spaced Repetition). Sync-Bereich der `04 Lernkarten`-Ordner steht in
+`.obsidian/plugins/flashcards-obsidian/data.json` (`syncScope.includedFolders`)
+– beim Anlegen eines neuen Moduls dort ergänzen.
+Details: `AGENTS.md` §3.
 
 ## 11. Häufige Probleme (FAQ)
 
@@ -252,6 +281,8 @@ Frage endet mit `?`, Antwort folgt, Karten mit `---` trennen, Deck-Kopfzeile
 | Todos tauchen zweimal auf | Modul-Aufgabe ist `#moodle` (beabsichtigter Reminder) oder lag doppelt an – `#checklist` zum Ausblenden |
 | Nach Umbenennen sind Links tot | Im **Explorer** umbenennen (Obsidian aktualisiert Links automatisch), nicht im Dateimanager |
 | Vorlage greift nicht | Einstellungen → Templater → Folder Templates / *Trigger on new file creation* ☑ |
+| Karten werden nicht als Deck erkannt | Format §10 prüfen (eine Zeile, ein `::`, Leerzeile dazwischen) – *Review flashcards* muss die Kartenzahl zeigen; Deck-Kopfzeile `#flashcards/…` ohne Leerzeichen |
+| Anki-Export findet die Notiz nicht | Anki Desktop + AnkiConnect (`2055492159`) laufen lassen; Sync-Bereich `syncScope.includedFolders` prüfen |
 
 ## 12. Für KI-Assistenten
 

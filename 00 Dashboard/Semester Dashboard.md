@@ -20,12 +20,13 @@ dv.paragraph(`📓 **Journal:** [[${tagesPfad}|Heute, ${heute.toFormat("dd.MM.yy
 
 ## 📌 Meine Module
 
-<!-- Eine Zeile pro Modul: Nummer, Emoji, Name und der Link aufs Modul-Dashboard.
+<!-- Eine Zeile pro Modul: Nummer, Emoji, Name, Link aufs Modul-Dashboard und
+     auf die Zusammenfassungs-Übersicht.
      Das Beispielmodul kannst du löschen, sobald deine eigenen Module stehen. -->
 
-| Modul | Dashboard |
-| --- | --- |
-| 📚 12345 Beispielmodul | [[12345 Dashboard]] |
+| Modul | Dashboard | 📝 Zusammenfassungen |
+| --- | --- | --- |
+| 📚 12345 Beispielmodul | [[12345 Dashboard]] | [[12345 Zusammenfassungen]] |
 
 ## ⏰ Nächste Termine & 🔴 Abgaben (alle Module)
 

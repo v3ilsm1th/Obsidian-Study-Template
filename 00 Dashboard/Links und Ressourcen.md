@@ -29,9 +29,9 @@ tags:
 
 <!-- Zeile pro Modul, Ordnerpfad möglichst mit angeben. -->
 
-| Modul | Dashboard | Ordner |
-| --- | --- | --- |
-| 📚 12345 Beispielmodul | [[12345 Dashboard]] | `01 Semester/WS 2026-2027/12345 …` |
+| Modul | Dashboard | 📝 Zusammenfassungen | Ordner |
+| --- | --- | --- | --- |
+| 📚 12345 Beispielmodul | [[12345 Dashboard]] | [[12345 Zusammenfassungen]] | `01 Semester/WS 2026-2027/12345 …` |
 
 ## 🛠️ Obsidian-Hilfe & Plugin-Doku
 

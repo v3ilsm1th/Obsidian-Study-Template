@@ -12,7 +12,7 @@ Halte dich beim Anlegen/Bearbeiten von Notizen an diese Regeln.
    Termine/                    # EINE Notiz pro Termin (siehe Felder unten)
    <Modulnr> <Modulname>/
       <Modulnr> Dashboard.md   # Modul-Dashboard (Kalender, Todos, Fortschritt)
-      01 Materialien/          # Skripte, Folien, PDFs
+      01 Materialien/          # Skripte, Folien, PDFs, Zusammenfassungen
       02 Übungen/              # Übungsblätter & Abgaben
       03 Literatur/            # Bücher, Paper, Links
       04 Lernkarten/           # Spaced-Repetition-Decks
@@ -61,7 +61,8 @@ muss – davon hängen die Deadlines-Übersichten ab.
 ## 2) Fortschritt / Lernerfolg ändern
 
 Lektionsnotizen haben `typ: lektion`, `modul`, `nummer`, `label`, `titel`,
-`status: offen | laeuft | fertig`. Nur den Wert `status` aktualisieren –
+`status: offen | laeuft | fertig` (ggf. `block` für Unterteilungen wie
+Unit/Part). Nur den Wert `status` aktualisieren –
 die Dashboards zählen automatisch neu.
 
 **Lektionen sind schlank:** Überblick, Materialien, Lernkarten,
@@ -71,25 +72,73 @@ ausschließlich nach `Termine/`).
 ## 3) Lernkarten generieren
 
 Zielordner: `<Modulordner>/04 Lernkarten/`, Dateiname z. B.
-`Lektion 3 - Ringe.md`. Format für das *Spaced-Repetition*-Plugin:
+`Lektion 1 - Einführung.md`. Format ist die **Einzeiler-Karte**
+`Frage?::Antwort` – die einzige Schreibweise, die sowohl das
+*Spaced-Repetition*-Plugin (`singleLineCardSeparator: "::"`) als auch das
+*Flashcards*-Plugin (Anki-Export, `inlineSeparator: "::"`) lesen:
 
 ```markdown
 ---
 modul: "12345"
 lektion: "[[Lektion 1 - Einführung]]"
+cards-deck: "Mein Fach::Lektion 1"
 art: lernkarte
 tags: [lernkarte]
 ---
 
-#flashcards/Mein Deck
+#flashcards/Mein-Modul/Lektion-1
 
-Was ist ein Ideal?
-Teilmenge eines Rings, die unter den Ringoperationen abgeschlossen ist.
----
+Was ist ein Ideal?::Teilmenge eines Rings, die unter den Ringoperationen abgeschlossen ist.
+
+Nenne das neutrale Element von (R, +, 0).::0
 ```
 
-Regeln: Frage endet mit `?`, Antwort folgt, Karten mit `---` trennen,
-Deck-Kopfzeile `#flashcards/<Deck>`.
+Regeln (geprüft gegen die Parser beider Plugins,
+`singleLineCardSeparator: "::"`, `multilineCardEndMarker: ""`):
+
+- **Karte = genau eine Zeile:** `Frage?::Antwort`, Frage endet mit `?`,
+  **Leerzeile** zwischen zwei Karten (sonst rutschen Überschriften oder
+  Nachbarfragen in die Karte). Pro Zeile **genau ein `::`** – ein zweites
+  würde an der falschen Stelle teilen, `:::` wäre eine umgekehrte Karte;
+  Antworten ohne Doppel-Punkt formulieren (ggf. umformulieren).
+- **Deck-Kopfzeile** `#flashcards/<Modulnr>/<Lektion>` als eigene Zeile mit
+  Leerzeile davor und danach – davon hängt die SR-Erkennung ab. Ebenen mit
+  `/` (Unterdeck). **Keine Leerzeichen** – Obsidian-Tags enden am
+  Leerzeichen, sonst wird nur der Teil vor dem Leerzeichen als Deck erkannt
+  (daher `Lektion-1`, nicht `Lektion 1`). Sie gehört in den Dateikörper,
+  nicht ins Frontmatter.
+- **`cards-deck` im Frontmatter** = Deck in Anki, Syntax
+  `Übergeordnet::Unterdeck` (z. B. `Mein Fach::Lektion 1`). Fehlt die
+  Eigenschaft, landet die Karte im Standarddeck `Studium`. Dieses `::` im
+  Frontmatter ist unkritisch: beide Plugins lesen das Frontmatter getrennt
+  vom Kartenkörper.
+  **Nach dem Umbenennen** einer neu angelegten Karten-Notiz den Wert prüfen:
+  die Vorlage schreibt den Dateititel zum Anlegen hinein, ein Rename ändert
+  ihn **nicht** (sonst hängt das Deck in Anki unter „Unbenannt“).
+- Deck-Kopf und `###`-Zwischenüberschriften von einer Leerzeile trennen.
+- Nichts verwenden, was die Parser als Trenner liest: kein `==` (wäre eine
+  Cloze-Karte), kein `??`, kein `---` als Trenner – und nicht das alte
+  Mehrzeilen-Format (Frage / eigene Zeile `?` / Antwort).
+- **Kontrolle SR:** Befehlspalette → *Spaced Repetition: Review flashcards*
+  muss das Deck mit Kartenzahl zeigen – findet sie keine, stimmt das Format
+  nicht (der Fehler bleibt sonst still). Ändert sich
+  `singleLineCardSeparator` in
+  `.obsidian/plugins/obsidian-spaced-repetition/data.json`, muss das Format
+  mitgeändert werden.
+- **Kontrolle Flashcards:** Lernkarten-Notiz offen → Statusleiste unten zeigt
+  `Note: N cards, …`; wenn dort `excluded` oder `no cards` steht, stimmt
+  Syntax oder Sync-Bereich nicht.
+- **Anki-Export** (Plugin *Flashcards*, aktiviert): Voraussetzung sind
+  **Anki (Desktop)** und das Add-on **AnkiConnect** (ID `2055492159`), dann
+  Befehlspalette → **Flashcards: Update Anki from vault** (oder
+  *… from current note*). Der Sync-Bereich steht in
+  `.obsidian/plugins/flashcards-obsidian/data.json` →
+  `syncScope.includedFolders` – beim Anlegen eines neuen Moduls den
+  `04 Lernkarten`-Ordner dort ergänzen; Deck je Notiz über `cards-deck`,
+  sonst `defaultDeck: "Studium"`. Beim ersten Sync ergänzt das Plugin pro
+  Karte einen Anker ` ^q-xxxx` am Zeilenende und eine `flashcards:`-Eigenschaft
+  – für SR unschädlich. Vorschau im Editor: `::` wird als Pfeil `→`
+  dargestellt (`renderPreview.features.inlineSeparator`).
 
 ## 4) Materialien/Übungen verknüpfen
 
@@ -100,15 +149,28 @@ Deck-Kopfzeile `#flashcards/<Deck>`.
   der **im Dashboard** auf `01 Materialien` (recursiv + `gruppiert: true`).
 - Dataview indexiert nur `.md`, deshalb listen Lektionen und Dashboards
   Dateien über
-  `await dv.view("Views/dateien", { pfad: "…/01 Materialien" })`
+  `await dv.view("Views/dateien", { pfad: "…/01 Materialien", gruppiert: true })`
   (liest direkt `app.vault`). Fremdformate (z. B. `.ipynb`) markiert die View
   selbst mit einem Hinweis.
 - **Übungsblätter/Abgaben:** in `<Modul>/02 Übungen/`.
   Übungs-Terminnotizen unter `Termine/` führen unter `## 📂 Unterlagen`
-  den `[[…pdf|…]]`-Link und das Abgabedatum.
+  den `[[…pdf|…]]`-Link, das Abgabedatum und ggf. den Lösungsvermerk.
+  **Ausnahme Moodle-Tests:** Bei Modulen, deren Abgaben **online als Test**
+  in Moodle geschrieben werden, gibt es keine Übungsblätter – `02 Übungen`
+  bleibt leer, alle Abgaben sind `deadline: true`-Termine mit
+  `typ: "Einsendeaufgabe"` (Frist/Uhrzeit stehen in der Terminnotiz).
 - **Notizen:** in `01 Materialien/` mit Eigenschaft
   `lektion: "[[Lektion 1 - Einführung]]"` anlegen – sie erscheint dann
   automatisch als Quicklink in der Lektion.
+- **Eigene Zusammenfassungen:** in `<Modul>/01 Materialien/Zusammenfassungen/`
+  ablegen (Ordner-Vorlage `Templates/Zusammenfassung Template` = Ordner-
+  Template von Templater, Eigenschaft `art: zusammenfassung`, `lektion`
+  optional). Direkt unter dem Titel steht
+  `await dv.view("Views/inhaltsverzeichnis", {})` – das Inhaltsverzeichnis
+  baut sich aus den `##`/`###`-Überschriften der Notiz automatisch auf und
+  aktualisiert sich live. Zugriff überall über die Übersichtsnotiz
+  `<Modulnr> Zusammenfassungen` (Modulordner) und den Abschnitt
+  `## 📝 Meine Zusammenfassungen` im Modul-Dashboard.
 
 ## 5) Dashboards / Views
 
@@ -123,6 +185,7 @@ Views in `Views/` (Dataview-JS) werden in den Dashboards so aufgerufen:
 | `todo.js` | `dv.view("Views/todo", { pfad?, tage? })` | offene Todos |
 | `woche.js` | `dv.view("Views/woche", { von?, bis? })` | Journal-Wochenansicht |
 | `dateien.js` | `dv.view("Views/dateien", { pfad, rekursiv?, gruppiert?, nur? })` | Dateien eines Ordners inkl. PDFs |
+| `inhaltsverzeichnis.js` | `dv.view("Views/inhaltsverzeichnis", { minLevel?, maxLevel?, titel? })` | Inhaltsverzeichnis der aktuellen Notiz (live, aus den Überschriften) |
 | `spalten.js` | `dv.view("Views/spalten", { spalten: [{ titel?, view, input? }, …], minBreite?, abstand? })` | legt mehrere Views **nebeneinander** (responsiv: schmal übereinander, viel Platz nebeneinander) |
 
 **Views nur ändern, wenn ausdrücklich gewünscht.** Pfadangaben enthalten
@@ -160,7 +223,8 @@ in der Checklisten-Fortschrittsanzeige (`dv.current().file.tasks`) mit.
 **Zweiter Tag `#moodle`:** alles, was man im LMS (Moodle o. ä.) aufruft –
 🎬 Videos/Recordings, 📄 Papers/Readings, Foren, Downloads – bekommt
 `#moodle` **statt** `#checklist` – erscheint zusätzlich als Reminder in den
-Todo-Listen („🗃️ Ohne Datum"), zählt aber im Checklisten-Balken mit.
+Todo-Listen („🗃️ Ohne Datum"), zählt aber im Checklisten-Balken mit
+(beide Tags zählen mit).
 
 ## 7) Typische Anfragen
 
