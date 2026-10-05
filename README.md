@@ -1,10 +1,8 @@
 # 🎓 Obsidian Studium Vault – Gerüst & Einrichtungsanleitung
 
-> [!abstract] Was ist das?
 > Ein **leeres Gerüst** für die eigene Studienorganisation: Ordnerstruktur,
 > Dashboards, Kalender, Todo-/Deadline-Übersichten, Fortschrittsverfolgung,
-> Lernkarten und Vorlagen. **Keine fremden Studienunterlagen** – nur ein
-> Beispielmodul, das du nach Belieben umbenennst oder löschst.
+> Lernkarten und Vorlagen.
 
 **Inhalt**
 1. [Voraussetzungen](#1-voraussetzungen) ·
